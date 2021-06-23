@@ -1,0 +1,198 @@
+SELECT
+		 d."Deal Name" 'Deal Name',
+		 concat('https://crm.zoho.com/crm/org697466983/tab/Potentials/', d."Id") 'Link to Deal',
+		 d."Id" 'Deal ID',
+		 d."Amount" 'Amount',
+		 d."Expected Revenue" 'Expected Revenue',
+		 d."Stage" 'Stage',
+		 d."Closing Date" 'Closing Date',
+		 d."Pipeline" 'Pipeline',
+		 d."Amount" 'MRR',
+		 null 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 null 'Meeting ID',
+		 'Deals' 'Category'
+FROM  "Deals" d
+JOIN "Users" u ON u."Id"  = d."Deal Owner_1"  
+UNION ALL
+ SELECT
+		 null 'Deal Name',
+		 null 'Link to Deal',
+		 null 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 c."Call Start Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 c."Id" 'Call ID',
+		 null 'Meeting ID',
+		 'Calls' 'Category'
+FROM  "Users" u
+JOIN "Calls" c ON c."Call Owner"  = u."Id"  
+UNION ALL
+ SELECT
+		 m."Title" 'Deal Name',
+		 null 'Link to Deal',
+		 null 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 m."From" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 m."Id" 'Meeting ID',
+		 'Meetings' 'Category'
+FROM  "Users" u
+JOIN "Meetings" m ON m."Created By"  = u."id"  
+UNION ALL
+ SELECT
+		 "Tasks"."Subject" 'Deal Name',
+		 null 'Link to Deal',
+		 null 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 "Tasks"."Task Type" 'Stage',
+		 "Tasks"."Created Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 "Tasks"."Id" 'Meeting ID',
+		 'Tasks' 'Category'
+FROM  "Users" u
+JOIN "Tasks" ON "Tasks"."Task Owner"  = u."id"  
+WHERE	 "Tasks"."Task Type"  is not null
+UNION ALL
+ SELECT
+		 null 'Deal Name',
+		 null 'Link to Deal',
+		 null 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 a."Modified Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 null 'Meeting ID',
+		 'Accounts Modified' 'Category'
+FROM  "Users" u
+JOIN "Accounts" a ON a."Modified By"  = u."id"  
+UNION ALL
+ SELECT
+		 null 'Deal Name',
+		 null 'Link to Deal',
+		 a."id" 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 a."Created Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 null 'Meeting ID',
+		 'Accounts Created' 'Category'
+FROM  "Users" u
+JOIN "Accounts" a ON a."Created By"  = u."Id"  
+UNION ALL
+ SELECT
+		 null 'Deal Name',
+		 null 'Link to Deal',
+		 c."Id" 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 c."Created Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 null 'Meeting ID',
+		 'Contacts Created' 'Category'
+FROM  "Users" u
+JOIN "Contacts" c ON c."Created By"  = u."Id"  
+UNION ALL
+ SELECT
+		 null 'Deal Name',
+		 null 'Link to Deal',
+		 c."Id" 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 c."Modified Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 null 'Meeting ID',
+		 'Contacts Modified' 'Category'
+FROM  "Users" u
+JOIN "Contacts" c ON c."Modified By"  = u."Id"  
+UNION ALL
+ SELECT
+		 null 'Deal Name',
+		 null 'Link to Deal',
+		 d."Id" 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 d."Created Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 null 'Meeting ID',
+		 'Deals Created' 'Category'
+FROM  "Users" u
+JOIN "Deals" d ON d."Deal Owner_1"  = u."Id"  
+UNION ALL
+ SELECT
+		 null 'Deal Name',
+		 null 'Link to Deal',
+		 d."Id" 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 d."Modified Time" 'Closing Date',
+		 null 'Pipeline',
+		 null 'MRR',
+		 u."Id" 'User ID',
+		 concat(u."First Name", ' ', u."Last Name") 'Full Name',
+		 null 'Call ID',
+		 null 'Meeting ID',
+		 'Deals Modified' 'Category'
+FROM  "Users" u
+JOIN "Deals" d ON d."Modified By"  = u."Id"  
+UNION ALL
+ SELECT
+		 d."Deal Name" 'Deal Name',
+		 concat('https://crm.zoho.com/crm/org697466983/tab/Potentials/', s."Deal Name") 'Link to Deal',
+		 s."Id" 'Deal ID',
+		 null 'Amount',
+		 null 'Expected Revenue',
+		 null,
+		 s."Modified Time" 'Closing Date',
+		 s."Stage" 'Pipeline',
+		 null 'MRR',
+		 s."Modified By" 'User ID',
+		 null 'Full Name',
+		 s."Stage Duration (Calendar Days)" 'Call ID',
+		 null 'Meeting ID',
+		 'Stage History' 'Category'
+FROM  "Stage History" s
+LEFT JOIN "Deals" d ON d."Modified By"  = s."Id"  
