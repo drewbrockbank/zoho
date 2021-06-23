@@ -1,0 +1,58 @@
+void shippingRecords(int NONE)
+{
+//GET LEAD RECORDS
+leadRecords = zoho.crm.getRecords("Shipments");
+info leadRecords;
+//SHIPPING ID LIST
+shippingIDList = List();
+for each  lead in leadRecords
+{
+	if(lead.getJSON("Tracking_ID").contains("1Z") == true)
+	{
+		shippingIDList.add(lead.getJSON("Tracking_ID"));
+	}
+}
+info shippingIDList;
+//CREATING NEW LIST FOR INVOKEURL CONTENTS
+upsInfoList = List();
+//GET EACH ID FROM SHIPPING LIST
+for each  identifier in shippingIDList
+{
+	//HEADER VALUES
+	header = Map();
+	header.put("AccessLicenseNumber","3D9D908A8B9CF375");
+	header.put("Host","<calculated when request is sent>");
+	// 	header.put("User-Agent","PostmanRuntime/7.28.0");
+	header.put("Accept","*/*");
+	header.put("Accept-Encoding","gzip, deflate, br");
+	header.put("Connection","keep-alive");
+	//INVOKE URL
+	getUPSTrackingInfo = invokeurl
+	[
+		url :"https://onlinetools.ups.com/track/v1/details/" + identifier
+		type :GET
+		parameters:header
+		headers:header
+	];
+	//CREATE LIST OF STATUS UPDATES
+	statusUpdateListings = List();
+	shippingStatus = getUPSTrackingInfo.getJSON("trackResponse").getJSON("shipment").getJSON("package").getJSON("activity").get(0).get("status").get("description");
+	info "THIS IS THE UPS SHIPPING STATUS: " + shippingStatus;
+	info "THIS IS THE UPS PAYLOAD IN JSON: " + getUPSTrackingInfo;
+	zohoShipmentRecord = zoho.crm.searchRecords("Shipments","(Tracking_ID:equals:" + identifier + ")");
+	info "THIS IS THE ZOHO RECORD IN ASSOCIATION WITH THE SHIPPING ID: " + zohoShipmentRecord;
+	//THE LINE BELOW IS GETTING THE SHIPMENT RECORD FROM THE ID
+	crmShipmentStatus = zohoShipmentRecord.getJSON("status");
+	info crmShipmentStatus;
+	if(crmShipmentStatus != shippingStatus)
+	{
+		//THE LINE BELOW IS GETTING THE ID FROM THE CRM SHIPMENT RECORD
+		crmShipmentNumber = zohoShipmentRecord.getJSON("id");
+		info crmShipmentNumber;
+		mp = Map();
+		mp.put("Status",shippingStatus);
+		shipmentRecordUpdate = zoho.crm.updateRecord("Shipments",crmShipmentNumber,mp);
+		info "THIS IS THE SHIPMENT RECORD UPDATE: " + shipmentRecordUpdate;
+	}
+}
+}
