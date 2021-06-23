@@ -1,0 +1,67 @@
+//4789547000003327179
+//GET RECORD
+leadRecord = zoho.crm.getRecordById("Leads",LEAD_ID);
+info leadRecord;
+//GET START TIME
+appointmentStartTime = leadRecord.get("Date_Time_1");
+info appointmentStartTime;
+//GET LEAD INFORMATION
+appointmentTime = leadRecord.get("Date_Time_1").remove("-07:00");
+info "START TIME " + appointmentTime;
+leadService = leadRecord.get("Service_Category");
+info leadService;
+leadName = leadRecord.get("First_Name") + " " + leadRecord.get("Last_Name");
+//GET END DATE TIME
+d = appointmentTime.getPrefix("T");
+time = appointmentTime.getSuffix("T");
+info d;
+info time;
+full = d.concat(" ").concat(time);
+info full;
+converted = full.toDateTime().addHour(1);
+info "CONVERTED DATE" + converted;
+convertedTime = converted.getSuffix(" ");
+info convertedTime;
+//HELP
+timeZone = "-7:00";
+appointmentTime_DATE = appointmentTime.getPrefix("T").toString("yyyy-MM-dd");
+appointmentTime_TIME = appointmentTime.getSuffix("T");
+info appointmentTime_TIME;
+appointmentEndTime = appointmentTime_DATE + "T" + convertedTime + "-07:00";
+info "APPOINTMENT END TIME: " + appointmentEndTime;
+eventTitle = leadService + " Service for " + leadName;
+info eventTitle;
+//TO STRING FOR TIME ZONE
+//TO STRING FOR TIME ZONE START AND END TIME
+timeZoneTestStart = toString(appointmentEndTime,"YYYY'-'MM'-'dd'T'hh:mm:ss","America/Mazatlan");
+info "TIME ZONE START TIME TEST: " + timeZoneTestStart;
+timeZoneTest = toString(appointmentEndTime.addHour(1),"YYYY'-'MM'-'dd'T'hh:mm:ss","America/Mazatlan");
+info "TIME ZONE END TIME TEST: " + timeZoneTest;
+//MAP
+mp = Map();
+mp.put("Start_DateTime",appointmentStartTime);
+mp.put("End_DateTime",appointmentEndTime);
+mp.put("Owner","4789547000000301001");
+mp.put("Event_Title",eventTitle);
+mp.put("Description","Name: " + leadName + " | " + " Address: " + leadRecord.get("Street") + ", " + leadRecord.get("City") + ", " + leadRecord.get("State") + " " + leadRecord.get("Zip_Code") + " USA" + " | " + "Phone: " + leadRecord.get("Phone") + " | " + "Calendar Notes: " + leadRecord.get("Calendar_Notes"));
+mp.put("What_Id",LEAD_ID);
+mp.put("se_module","Leads");
+//CREATE NEW MEETING
+newMeeting = zoho.crm.createRecord("Events",mp);
+info newMeeting;
+//GET NEW MEETING RECORD
+meetingRecord = zoho.crm.getRecordById("Events",newMeeting.get("id"));
+info meetingRecord;
+//
+/*
+BLAINE SAVED ME LIFE
+full_date = "2021-05-20T17:30:00";
+d = full_date.getPrefix("T");
+time = full_date.getSuffix("T");
+info(d);
+info(time);
+full = d.concat(" ").concat(time);
+info(full);
+converted = full.toDateTime().addHour(1);
+info(converted.toString('YYYY-MM-DD hh:mm:ss'));
+*/
