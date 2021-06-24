@@ -1,0 +1,50 @@
+SELECT
+		 f."Floorplan Name" 'Floorplan Name',
+		 concat('https://crm.zoho.com/crm/org696896311/tab/Potentials/', d."id") 'Deal URL',
+		 d."Deal Name" 'Deal Name',
+		 d."Closing Date" 'Date',
+		 d."Amount" 'Deal Amount',
+		 null 'Expected Revenue',
+		 null 'Presale Milestone Amount',
+		 null 'Amount Remaining',
+		 d."Stage" 'Deal Stage',
+		 'Deals' 'Category'
+FROM  "Deals" d
+LEFT JOIN "Floorplans" f ON f."id"  = d."Floorplan"  
+UNION ALL
+ SELECT
+		 null 'Floorplan Name',
+		 null 'Deal URL',
+		 null 'Deal Name',
+		 "Month" 'Date',
+		 null 'Deal Amount',
+		 null 'Expected Revenue',
+		 "Presale Milestone" 'Presale Milestone Amount',
+		 null 'Amount Remaining',
+		 null 'Deal Stage',
+		 'Presale Milestone' 'Category'
+FROM  "Lender Presale Milestone" 
+UNION ALL
+ SELECT
+		 f."Floorplan Name" 'Floorplan Name',
+		 concat('https://crm.zoho.com/crm/org696896311/tab/Potentials/', d."id") 'Deal URL',
+		 d."Deal Name" 'Deal Name',
+		 d."Closing Date" 'Date',
+		 null 'Deal Amount',
+		 d."Expected Revenue" 'Expected Revenue',
+		 null 'Presale Milestone Amount',
+		 null 'Amount Remaining',
+		 null 'Deal Stage',
+		 'Expected Revenue' 'Category'
+FROM  "Deals" d
+LEFT JOIN "Floorplans" f ON f."id"  = d."Floorplan" /*
+ All the deal information needs to get sorted out before I do anything more here. See Calis screenshot to move forward. 
+ UNION ALL
+ SELECT
+		 l."Date" 'Date',
+		 null 'Deal Amount',
+		 null 'Presale Milestone Amount',
+         null 'Amount Remaining',
+		 'Presale Milestone' 'Category'
+FROM  "Lender Presale Milestone" l
+JOIN */
