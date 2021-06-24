@@ -1,0 +1,24 @@
+for each  entry in Add_Forecasted_Events
+{
+	startDate = entry.Start_Date;
+	//to get subform columns, you just need to do rowvariable.columnname. No need for .get("Column Name")
+	endDate = entry.End_Date;
+	state = entry.State;
+	status = entry.Status;
+	eventName = entry.Forecasted_Event_Name;
+	eventMap = Map();
+	eventMap.put("Start_Date",startDate);
+	eventMap.put("End_Date",endDate);
+	eventMap.put("Event_State",state);
+	//CRM API name for State is Event State
+	eventMap.put("Status",status);
+	eventMap.put("Name",eventName);
+	eventMap.put("Deal",input.Deal_ID);
+	//CRM API name for Promoter is Deal
+	createCrmEvent = zoho.crm.createRecord("Forecasted_Events",eventMap,{"trigger":{"workflow"}});
+	info createCrmEvent;
+}
+// info startDate;
+// info endDate;
+// info eventMap;
+// info createCrmEvent;
