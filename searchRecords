@@ -1,0 +1,23 @@
+void newOrderNewShipmentRecord(string SHIPMENT_NAME, string ORDER_DATE, string ORDER_NUMBER, string STATUS, string POSTAL_CODE)
+{
+//REFORMAT DATE
+shipDate = ORDER_DATE.getPrefix("T");
+info shipDate;
+//CREATE MAP
+mp = Map();
+mp.put("Order_Number",ORDER_NUMBER);
+mp.put("Order_Date",shipDate);
+mp.put("Name",SHIPMENT_NAME);
+// 	mp.put("Owner", <OBJECT>);
+mp.put("Status",STATUS);
+mp.put("ZIP_Code",POSTAL_CODE);
+//
+createShipmentRecord = zoho.crm.createRecord("Shipments",mp);
+info createShipmentRecord;
+//
+if (createShipmentRecord.get("ZIP_Code") != null) 
+{
+	accountRecord = zoho.crm.searchRecords("Accounts","(Billing_Code:equals:" + POSTAL_CODE + ")");
+info accountRecord;
+}
+}
