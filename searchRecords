@@ -15,9 +15,30 @@ mp.put("ZIP_Code",POSTAL_CODE);
 createShipmentRecord = zoho.crm.createRecord("Shipments",mp);
 info createShipmentRecord;
 //
-if (createShipmentRecord.get("ZIP_Code") != null) 
+shipmentCode = createShipmentRecord.getJson("ZIP_Code");
+info "THIS IS THE ZIP CODE: " + shipmentCode;
+//
+shipmentRecordID = createShipmentRecord.get("id");
+info shipmentRecordID;
+//EXTENSION OF CUSTOM FUNCTION BY DREW BROCKBANK
+// if(shipmentCode != null)
+// {
+accountRecordList = zoho.crm.searchRecords("Accounts","(Billing_Code:equals:" + POSTAL_CODE + ")");
+info "THIS IT THE ACCOUNT RECORDS LIST: " + accountRecordList;
+//IF THE ACCOUNTRECORDLIST EXISTS, GET FIRST ITEM FROM THE LIST
+if(accountRecordList.isEmpty() == false)
 {
-	accountRecord = zoho.crm.searchRecords("Accounts","(Billing_Code:equals:" + POSTAL_CODE + ")");
-info accountRecord;
+	accountRecord = accountRecordList.get(0);
+	info accountRecord;
+	//GET ID 
+	accountID = accountRecord.getJson("id");
+	info accountID;
+	//MAP
+	billingCodeMap = Map();
+	billingCodeMap.put("Related_Account",accountID);
+	//
+	updateShipmentRecord = zoho.crm.updateRecord("Shipments",shipmentRecordID,billingCodeMap);
+	info updateShipmentRecord;
+	// }
 }
 }
