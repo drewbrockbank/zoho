@@ -1,0 +1,17 @@
+//4292801000014578119
+//GET RECORD BY ID
+dealRecord = zoho.crm.getRecordById("Deals",DEAL_ID);
+info dealRecord;
+//GET RECORD INFORMATION
+email = dealRecord.get("Email_1");
+info email;
+fName = dealRecord.get("First_Name");
+info fName;
+lName = dealRecord.get("Last_Namw");
+info lName;
+mp = Map();
+mp.put("email",email);
+mp.put("firstName",fName);
+mp.put("lastName",lName);
+postURL = postUrl("https://flow.zoho.com/729725386/flow/webhook/incoming?zapikey=1001.45847d623c1c9371c43833d2b9089a7e.20b18059a1f309297c5add866af2d724&isdebug=false",mp);
+info postURL;
