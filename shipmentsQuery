@@ -1,0 +1,13 @@
+SELECT
+		 "Shipment Name" 'Shipment Name',
+		 upper_case(replace("Status", '_', ' ')) 'Shipping Status',
+		 "Order Number",
+		 "Tracking ID",
+		 "Order Date",
+         "Items",
+		 concat('https://crm.zoho.com/crm/org700603491/tab/CustomModule7/', "Id") 'CRM URL'
+FROM  "Shipments" 
+WHERE	"Status"  IS NOT NULL AND	"Status"  NOT LIKE 'Delivered' AND "Items" NOT LIKE '%Minncare%' AND "Items" NOT LIKE '%Sanidate%' AND "Items" NOT LIKE '%deconspore%'
+ORDER BY "Status" DESC 
+/*AND "Items" != CONTAINS('Cassette') OR "Items" != '%Sanidate%' OR "Items" != '%deconspore%' OR "Items" != '%EliteWorks%'
+ */
